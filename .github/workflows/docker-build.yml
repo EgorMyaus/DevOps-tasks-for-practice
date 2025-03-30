@@ -31,4 +31,4 @@ jobs:
         with:
           context: ./Python-api
           push: true
-          tags: egormyaus/python-api:latest
+          tags: miuasyehor/python-api:latest
