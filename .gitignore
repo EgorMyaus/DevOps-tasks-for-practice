@@ -1,0 +1,83 @@
+# Python bytecode and cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyzw
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+.Python
+
+# Environment files (Do not commit secrets!)
+.env
+.env.*
+!/.env.example # Usually safe to commit an example file
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+._*
+
+# Python build artifacts
+/build/
+/dist/
+*.egg-info/
+/htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+*.pot
+*.pyt
+
+# Node.js dependencies and artifacts (if used for JS frontend)
+node_modules/
+/build/ # Could conflict with Python if directory structure is the same
+/dist/  # Could conflict with Python
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# package-lock.json # Depending on dependency management strategy
+# yarn.lock       # Depending on dependency management strategy
+
+# Test files
+.pytest_cache/
+pytestdebug.log
+
+# Other temporary/backup files
+*.bak
+*.tmp
+
+# Terraform specific files (if used)
+# .terraform/
+# *.tfstate
+# *.tfstate.*
+# crash.log
+# override.tf
+# override.tf.json
+# *_override.tf
+# *_override.tf.json
+# .terraformrc
+# terraform.rc
+
+# Docker specific files (local files, not images)
+# docker-compose.override.yml
+im
