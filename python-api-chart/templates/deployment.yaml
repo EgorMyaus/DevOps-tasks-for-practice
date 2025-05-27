@@ -1,0 +1,79 @@
+# python-api-chart/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "python-api-chart.fullname" . }}
+  labels:
+    {{- include "python-api-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.hpa.enabled }} # Only set replicas if HPA is not enabled
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "python-api-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "python-api-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "python-api-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }} # Name of the main container
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: / # Change to your health check endpoint
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: / # Change to your health check endpoint
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.busyboxLoadgen.enabled }}
+        - name: busybox-loadgen
+          image: "{{ .Values.busyboxLoadgen.image.repository }}:{{ .Values.busyboxLoadgen.image.tag }}"
+          imagePullPolicy: {{ .Values.busyboxLoadgen.image.pullPolicy }}
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "Starting memory load generation for busybox..."
+              mkdir -p /tmp/memhold
+              mount -t tmpfs -o size={{ .Values.busyboxLoadgen.tmpfsSize }} tmpfs /tmp/memhold
+              echo "tmpfs mounted at /tmp/memhold with size {{ .Values.busyboxLoadgen.tmpfsSize }}"
+              dd if=/dev/zero of=/tmp/memhold/largefile bs=1M count={{ .Values.busyboxLoadgen.fileSizeMB }}
+              echo "Allocated {{ .Values.busyboxLoadgen.fileSizeMB }}MB in tmpfs. Sleeping for {{ .Values.busyboxLoadgen.sleepDuration }}s..."
+              sleep {{ .Values.busyboxLoadgen.sleepDuration }}
+          resources:
+            {{- toYaml .Values.busyboxLoadgen.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

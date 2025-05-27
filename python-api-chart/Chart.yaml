@@ -1,0 +1,32 @@
+# python-api-chart/Chart.yaml
+apiVersion: v2
+name: python-api-chart
+description: A Helm chart for deploying the python-api backend
+type: application # Chart type (application or library)
+
+# Chart version. Increment it with each change.
+version: 0.1.1
+
+# Version of the application being deployed by this chart.
+appVersion: "1.0.0"
+
+# Chart icon
+icon: https://www.python.org/static/community_logos/python-logo-generic.svg
+
+# (Optional) Keywords for searching
+keywords:
+  - python
+  - api
+  - backend
+
+# (Optional) Project homepage
+# home: https://my-python-api.example.com
+
+# (Optional) Sources
+# sources:
+#   - https://github.com/your-repo/python-api
+
+# (Optional) Maintainers
+# maintainers:
+#   - name: Your Name
+#     email: your.email@example.com
