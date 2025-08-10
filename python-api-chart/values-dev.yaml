@@ -15,8 +15,8 @@ image:
 # HPA settings for dev
 hpa:
   enabled: true # Or false if you don't need HPA in dev
-  minReplicas: 1
-  maxReplicas: 2 # Allow some scaling but keep it small
+  minReplicas: 2
+  maxReplicas: 5 # Allow some scaling but keep it small
   targetMemoryUtilizationPercentage: 75 # Potentially a more relaxed target for dev
 
 # Resource requests and limits for dev (might be lower than prod)
